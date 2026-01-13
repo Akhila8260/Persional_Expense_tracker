@@ -1,0 +1,5 @@
+package com.track.Entity;
+
+public class Expense {
+
+}

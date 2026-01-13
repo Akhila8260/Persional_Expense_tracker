@@ -1,0 +1,32 @@
+package com.track.Controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.track.Entity.Income;
+import com.track.Service.IncomeService;
+@RestController
+@RequestMapping("/api/income")
+@CrossOrigin
+public class IncomeController {
+	@Autowired
+    private IncomeService incomeService;
+
+    @PostMapping
+    public Income addIncome(@RequestBody Income income) {
+        return incomeService.addIncome(income);
+    }
+
+    @GetMapping
+    public List<Income> getIncome() {
+        return incomeService.getAllIncome();
+    }
+
+}
