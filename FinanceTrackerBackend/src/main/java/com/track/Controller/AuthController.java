@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.track.Entity.User;
 import com.track.Service.AuthService;
+import com.track.dto.AuthResponse;
 @RestController
 @RequestMapping("/api/auth")
 @CrossOrigin
@@ -23,8 +24,14 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public User login(@RequestBody User user) {
-        return authService.login(user.getEmail(), user.getPassword());
+    public AuthResponse login(@RequestBody User user) {
+
+        User authenticatedUser =
+                authService.login(user.getEmail(), user.getPassword());
+
+        String token = authService.generateToken(authenticatedUser);
+
+        return new AuthResponse(token, authenticatedUser.getId());
     }
 
 }

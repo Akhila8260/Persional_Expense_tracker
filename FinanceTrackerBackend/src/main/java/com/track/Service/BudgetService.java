@@ -1,25 +1,35 @@
 package com.track.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.track.Entity.Budget;
+import com.track.Entity.User;
 import com.track.repository.BudgetRepository;
 import com.track.repository.ExpenseRepository;
+import com.track.repository.UserRepository;
+
 @Service
-public class BudgetService  {
-	@Autowired
+public class BudgetService {
+
+    @Autowired
     private BudgetRepository budgetRepo;
 
     @Autowired
     private ExpenseRepository expenseRepo;
 
-    public Budget saveBudget(Budget budget) {
+    @Autowired
+    private UserRepository userRepository;
+
+    // ✅ FIX: fetch user from DB
+    public Budget saveBudget(Budget budget, Long userId) {
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        budget.setUser(user);
         return budgetRepo.save(budget);
     }
 
@@ -43,5 +53,4 @@ public class BudgetService  {
 
         return response;
     }
-
 }

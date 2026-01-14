@@ -5,9 +5,12 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.track.Entity.Income;
@@ -20,13 +23,24 @@ public class IncomeController {
     private IncomeService incomeService;
 
     @PostMapping
-    public Income addIncome(@RequestBody Income income) {
-        return incomeService.addIncome(income);
+    public Income addIncome(
+            @RequestParam Long userId,
+            @RequestBody Income income) {
+
+        return incomeService.addIncome(income, userId);
     }
 
     @GetMapping
-    public List<Income> getIncome() {
-        return incomeService.getAllIncome();
+    public List<Income> getIncome(@RequestParam Long userId) {
+        return incomeService.getAllIncome(userId);
+    }
+    @PutMapping("/{id}")
+    public Income updateIncome(
+            @PathVariable Long id,
+            @RequestParam Long userId,
+            @RequestBody Income updatedIncome) {
+
+        return incomeService.updateIncome(id, updatedIncome, userId);
     }
 
 }

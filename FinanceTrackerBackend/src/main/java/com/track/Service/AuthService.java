@@ -1,26 +1,37 @@
 package com.track.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.track.Entity.User;
 import com.track.repository.UserRepository;
+
 @Service
 public class AuthService {
-	
-	 @Autowired
-	    private UserRepository userRepository;
 
-	    public User register(User user) {
-	        return userRepository.save(user);
-	    }
+    @Autowired
+    private UserRepository userRepository;
 
-	    public User login(String email, String password) {
-	        User user = userRepository.findByEmail(email);
-	        if (user != null && user.getPassword().equals(password)) {
-	            return user;
-	        }
-	        throw new RuntimeException("Invalid credentials");
-	    }
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
+    public User register(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return userRepository.save(user);
+    }
+
+    public User login(String email, String password) {
+        User user = userRepository.findByEmail(email);
+
+        if (user != null && passwordEncoder.matches(password, user.getPassword())) {
+            return user;
+        }
+        throw new RuntimeException("Invalid credentials");
+    }
+
+	public String generateToken(User authenticatedUser) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
