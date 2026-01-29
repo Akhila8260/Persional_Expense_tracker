@@ -14,12 +14,12 @@ public class AnalyticsController {
     private AnalyticsService analyticsService;
 
     @GetMapping("/summary")
-    public Map<String, Double> summary() {
-        return analyticsService.getSummary();
+    public Map<String, Double> summary(@RequestParam Long userId) {
+        return analyticsService.getSummary(userId);
     }
 
     @GetMapping("/expense-category")
-    public Map<String, Double> expenseByCategory() {
-        return analyticsService.getExpenseByCategory();
+    public Map<String, Double> expenseByCategory(@RequestParam Long userId) {
+        return analyticsService.getExpenseByCategory(userId);
     }
 }

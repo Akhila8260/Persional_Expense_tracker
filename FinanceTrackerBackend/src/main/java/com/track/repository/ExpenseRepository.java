@@ -10,14 +10,24 @@ import com.track.Entity.Expense;
 @Repository
 public interface ExpenseRepository extends JpaRepository<Expense, Long> {
 	
+	List<Expense> findByUserId(Long userId);
+
+	
 	@Query("SELECT SUM(e.amount) FROM Expense e WHERE e.user.id = :userId AND e.title = :category")
 	Double getTotalExpenseByCategory(Long userId, String category);
 	
-	@Query("SELECT e.title, SUM(e.amount) FROM Expense e GROUP BY e.title")
-	List<Object[]> getExpenseByCategory();
+	@Query("""
+			   SELECT e.title, SUM(e.amount)
+			   FROM Expense e
+			   WHERE e.user.id = :userId
+			   GROUP BY e.title
+			""")
+			List<Object[]> getExpenseByCategory(Long userId);
 
-	@Query("SELECT SUM(e.amount) FROM Expense e")
-	Double getTotalExpense();
+
+			@Query("SELECT COALESCE(SUM(e.amount),0) FROM Expense e WHERE e.user.id = :userId")
+			Double getTotalExpense(Long userId);
+
 
 
 }

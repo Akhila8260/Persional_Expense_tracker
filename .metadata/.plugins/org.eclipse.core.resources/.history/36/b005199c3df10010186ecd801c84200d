@@ -1,5 +1,0 @@
-package com.track.dto;
-
-public class AuthResponse {
-
-}

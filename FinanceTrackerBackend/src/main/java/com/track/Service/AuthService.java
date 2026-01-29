@@ -1,5 +1,7 @@
 package com.track.Service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -16,22 +18,57 @@ public class AuthService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    /* ================= REGISTER ================= */
     public User register(User user) {
+
+        // 1. Optional: prevent duplicate email
+        if (userRepository.findByEmail(user.getEmail()) != null) {
+            throw new RuntimeException("Email already exists");
+        }
+
+        // 2. Hash password before saving
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+
         return userRepository.save(user);
     }
 
+    /* ================= LOGIN ================= */
     public User login(String email, String password) {
+
+        // 1. Fetch user
         User user = userRepository.findByEmail(email);
 
-        if (user != null && passwordEncoder.matches(password, user.getPassword())) {
-            return user;
+        if (user == null) {
+            throw new RuntimeException("User not found");
         }
-        throw new RuntimeException("Invalid credentials");
+
+        // 2. BCrypt secure match
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            throw new RuntimeException("Invalid credentials");
+        }
+
+        return user;
     }
 
-	public String generateToken(User authenticatedUser) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    /* ================= JWT PLACEHOLDER ================= */
+    public String generateToken(User authenticatedUser) {
+        // will implement when JWT is added
+        return null;
+    }
+    
+    // 🔹 For forgot-password flow (safe null handling)
+    public Optional<User> findByEmailOptional(String email) {
+        User user = userRepository.findByEmail(email);
+        return Optional.ofNullable(user);
+    }
+
+    public String encodePassword(String raw) {
+        return passwordEncoder.encode(raw);
+    }
+
+    public void save(User user) {
+        userRepository.save(user);
+    }
+
+
 }

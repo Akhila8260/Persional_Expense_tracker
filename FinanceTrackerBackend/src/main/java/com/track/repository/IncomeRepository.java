@@ -1,5 +1,7 @@
 package com.track.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -7,8 +9,16 @@ import org.springframework.stereotype.Repository;
 import com.track.Entity.Income;
 @Repository
 public interface IncomeRepository extends JpaRepository<Income, Long> {
+	
+	List<Income> findByUserId(Long userId);
+
+	
 	@Query("SELECT SUM(i.amount) FROM Income i")
 	Double getTotalIncome();
+	
+	@Query("SELECT COALESCE(SUM(i.amount),0) FROM Income i WHERE i.user.id = :userId")
+	Double getTotalIncome(Long userId);
+
 
 
 }

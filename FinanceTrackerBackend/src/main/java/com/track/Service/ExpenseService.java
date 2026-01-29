@@ -20,23 +20,21 @@ public class ExpenseService {
     private UserRepository userRepository;
 
     public Expense addExpense(Expense expense, Long userId) {
-
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
-
         expense.setUser(user);
         return expenseRepository.save(expense);
     }
 
-    public List<Expense> getAllExpenses() {
-        return expenseRepository.findAll();
+    public List<Expense> getAllExpenses(Long userId) {
+        return expenseRepository.findByUserId(userId);
     }
+
     public Expense updateExpense(Long expenseId, Expense updatedExpense, Long userId) {
 
         Expense existing = expenseRepository.findById(expenseId)
                 .orElseThrow(() -> new RuntimeException("Expense not found"));
 
-        // 🔒 Ownership validation
         if (!existing.getUser().getId().equals(userId)) {
             throw new RuntimeException("Unauthorized access");
         }
@@ -46,5 +44,4 @@ public class ExpenseService {
 
         return expenseRepository.save(existing);
     }
-
 }

@@ -1,5 +1,0 @@
-package com.track.security;
-
-public class JwtUtil {
-
-}

@@ -15,18 +15,19 @@ public class AnalyticsService {
     @Autowired
     private IncomeRepository incomeRepo;
 
-    public Map<String, Double> getSummary() {
+    public Map<String, Double> getSummary(Long userId) {
         Map<String, Double> map = new HashMap<>();
-        map.put("totalExpense", Optional.ofNullable(expenseRepo.getTotalExpense()).orElse(0.0));
-        map.put("totalIncome", Optional.ofNullable(incomeRepo.getTotalIncome()).orElse(0.0));
+        map.put("totalExpense", expenseRepo.getTotalExpense(userId));
+        map.put("totalIncome", incomeRepo.getTotalIncome(userId));
         return map;
     }
 
-    public Map<String, Double> getExpenseByCategory() {
+    public Map<String, Double> getExpenseByCategory(Long userId) {
         Map<String, Double> result = new HashMap<>();
-        for (Object[] row : expenseRepo.getExpenseByCategory()) {
+        for (Object[] row : expenseRepo.getExpenseByCategory(userId)) {
             result.put((String) row[0], (Double) row[1]);
         }
         return result;
     }
+
 }

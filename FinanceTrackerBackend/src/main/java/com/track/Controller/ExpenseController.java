@@ -21,30 +21,26 @@ import com.track.Service.ExpenseService;
 @RequestMapping("/api/expense")
 @CrossOrigin
 public class ExpenseController {
-	
-	@Autowired
+
+    @Autowired
     private ExpenseService expenseService;
 
     @PostMapping
-    public Expense addExpense(
-            @RequestParam Long userId,
-            @RequestBody Expense expense) {
-
+    public Expense addExpense(@RequestParam Long userId,
+                              @RequestBody Expense expense) {
         return expenseService.addExpense(expense, userId);
     }
 
     @GetMapping
-    public List<Expense> getExpenses() {
-        return expenseService.getAllExpenses();
+    public List<Expense> getExpenses(@RequestParam Long userId) {
+        return expenseService.getAllExpenses(userId);
     }
-    
-    @PutMapping("/{id}")
-    public Expense updateExpense(
-            @PathVariable Long id,
-            @RequestParam Long userId,
-            @RequestBody Expense updatedExpense) {
 
+    @PutMapping("/{id}")
+    public Expense updateExpense(@PathVariable Long id,
+                                 @RequestParam Long userId,
+                                 @RequestBody Expense updatedExpense) {
         return expenseService.updateExpense(id, updatedExpense, userId);
     }
-
 }
+

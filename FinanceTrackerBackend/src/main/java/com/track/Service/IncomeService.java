@@ -30,8 +30,9 @@ public class IncomeService {
     }
 
     public List<Income> getAllIncome(Long userId) {
-        return incomeRepository.findAll();
+        return incomeRepository.findByUserId(userId);
     }
+
     public Income updateIncome(Long incomeId, Income updatedIncome, Long userId) {
 
         Income existing = incomeRepository.findById(incomeId)
